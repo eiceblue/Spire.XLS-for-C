@@ -9,23 +9,23 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
-	std::vector<ExcelFont*> fonts;
+	std::vector<intrusive_ptr<ExcelFont>> fonts;
 
 	//Loop all sheets of workbook
 	for (int i = 0; i < workbook->GetWorksheets()->GetCount(); i++)
 	{
-		Worksheet* sheet = workbook->GetWorksheets()->Get(i);
+		intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(i));
 		for (int r = 0; r < sheet->GetRows()->GetCount(); r++)
 		{
 			for (int c = 0; c < sheet->GetRows()->GetItem(r)->GetCells()->GetCount(); c++)
 			{
 				//Get the font of cell and add it to list
-				fonts.push_back(sheet->GetRows()->GetItem(r)->GetCells()->GetItem(c)->GetStyle()->GetFont());
+				fonts.push_back(dynamic_pointer_cast<ExcelFont>(sheet->GetRows()->GetItem(r)->GetCells()->GetItem(c)->GetStyle()->GetFont()));
 			}
 		}
 	}

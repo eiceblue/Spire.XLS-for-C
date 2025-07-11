@@ -3,17 +3,22 @@ using namespace Spire::Xls;
 
 int main() {
 	wstring output_path = OUTPUTPATH;
+	wstring data_path = DATAPATH;
+	wstring inputFile = data_path + L"DataValidation.xlsx";
 	wstring outputFile = output_path + L"DataValidation_result.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
+
+	//Load the Excel document from disk
+	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Decimal DataValidation
-	sheet->GetRange(L"B11")->SetText(L"Input Number(3-6):");
-	CellRange* rangeNumber = sheet->GetRange(L"B12");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B11"))->SetText(L"Input Number(3-6):");
+	intrusive_ptr<CellRange> rangeNumber = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B12"));
 	//Set the operator for the data validation.
 	rangeNumber->GetDataValidation()->SetCompareOperator(ValidationComparisonOperator::Between);
 	//Set the value or expression associated with the data validation.
@@ -29,8 +34,8 @@ int main() {
 	rangeNumber->GetStyle()->SetKnownColor(ExcelColors::Gray25Percent);
 
 	//Date DataValidation
-	sheet->GetRange(L"B14")->SetText(L"Input Date:");
-	CellRange* rangeDate = sheet->GetRange(L"B15");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B14"))->SetText(L"Input Date:");
+	intrusive_ptr<CellRange> rangeDate = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B15"));
 	rangeDate->GetDataValidation()->SetAllowType(CellDataType::Date);
 	rangeDate->GetDataValidation()->SetCompareOperator(ValidationComparisonOperator::Between);
 	rangeDate->GetDataValidation()->SetFormula1(L"1/1/1970");
@@ -41,8 +46,8 @@ int main() {
 	rangeDate->GetStyle()->SetKnownColor(ExcelColors::Gray25Percent);
 
 	//TextLength DataValidation
-	sheet->GetRange(L"B17")->SetText(L"Input Text:");
-	CellRange* rangeTextLength = sheet->GetRange(L"B18");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B17"))->SetText(L"Input Text:");
+	intrusive_ptr<CellRange> rangeTextLength = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B18"));
 	rangeTextLength->GetDataValidation()->SetAllowType(CellDataType::TextLength);
 	rangeTextLength->GetDataValidation()->SetCompareOperator(ValidationComparisonOperator::LessOrEqual);
 	rangeTextLength->GetDataValidation()->SetFormula1(L"5");

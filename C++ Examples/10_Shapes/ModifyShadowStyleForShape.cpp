@@ -8,23 +8,23 @@ int main() {
 	wstring outputFile = output_path + L"ModifyShadowStyleForShape.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the third shape from the worksheet.
-	IPrstGeomShape* shape = sheet->GetPrstGeomShapes()->Get(2);
+	intrusive_ptr<IPrstGeomShape> shape = sheet->GetPrstGeomShapes()->Get(2);
 
 	//Set the shadow style for the shape.
 	shape->GetShadow()->SetAngle(90);
 	shape->GetShadow()->SetTransparency(30);
 	shape->GetShadow()->SetDistance(10);
 	shape->GetShadow()->SetSize(130);
-	shape->GetShadow()->SetColor(Spire::Common::Color::GetYellow());
+	shape->GetShadow()->SetColor(Spire::Xls::Color::GetYellow());
 	shape->GetShadow()->SetBlur(30);
 	shape->GetShadow()->SetHasCustomStyle(true);
 

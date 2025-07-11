@@ -9,23 +9,23 @@ int main() {
 	wstring outputFile = output_path + L"ChartAxisTitle.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the chart
-	Chart* chart = sheet->GetCharts()->Get(0);
+	intrusive_ptr<Chart> chart = dynamic_pointer_cast<Chart>(sheet->GetCharts()->Get(0));
 
 	//Set axis title
-	chart->GetPrimaryCategoryAxis()->SetTitle(L"Category Axis");
+	dynamic_pointer_cast<ChartCategoryAxis>(chart->GetPrimaryCategoryAxis())->SetTitle(L"Category Axis");
 	chart->GetPrimaryValueAxis()->SetTitle(L"Value axis");
 
 	//Set font size
-	chart->GetPrimaryCategoryAxis()->GetFont()->SetSize(12);
+	dynamic_pointer_cast<ChartCategoryAxis>(chart->GetPrimaryCategoryAxis())->GetFont()->SetSize(12);
 	chart->GetPrimaryValueAxis()->GetFont()->SetSize(12);
 
 	//Save to file.

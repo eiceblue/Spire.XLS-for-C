@@ -8,18 +8,18 @@ int main() {
 	wstring outputFile = output + L"FormatDataField.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	// Access the PivotTable
-	XlsPivotTable* pt = dynamic_cast<XlsPivotTable*>(sheet->GetPivotTables()->Get(0));
+	intrusive_ptr<XlsPivotTable> pt = dynamic_pointer_cast<XlsPivotTable>(sheet->GetPivotTables()->Get(0));
 	// Access the data field.
-	PivotDataField* pivotDataField = pt->GetDataFields()->Get(0);
+	intrusive_ptr<PivotDataField> pivotDataField = pt->GetDataFields()->Get(0);
 	// Set data display format
 	pivotDataField->SetShowDataAs(PivotFieldFormatType::PercentageOfColumn);
 

@@ -3,13 +3,13 @@ using namespace Spire::Xls;
 
 int main() {
 	wstring output_path = OUTPUTPATH;
-	wstring outputFile = OUTPUTPATH + L"CopyShapes.xlsx";
+	wstring outputFile = output_path + L"CopyShapes.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create line shape
 	auto line = sheet->GetTypedLines()->AddLine();
@@ -20,7 +20,7 @@ int main() {
 	line->SetBeginArrowHeadStyle(ShapeArrowStyleType::LineArrowDiamond);
 	line->SetEndArrowHeadStyle(ShapeArrowStyleType::LineArrow);
 
-	Worksheet* CopyShapes = workbook->GetWorksheets()->Get(1);
+	intrusive_ptr<Worksheet> CopyShapes = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(1));
 	//Copy the line into other sheet
 	CopyShapes->GetTypedLines()->AddCopy(line);
 
@@ -37,10 +37,10 @@ int main() {
 	CopyShapes->GetTypedCheckBoxes()->AddCopy(checkbox);
 
 	//Create a comboboxes and then copy into other sheet
-	sheet->GetRange(L"A14")->SetValue(L"1");
-	sheet->GetRange(L"A15")->SetValue(L"2");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A14"))->SetValue(L"1");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A15"))->SetValue(L"2");
 	auto ComboBoxes = sheet->GetTypedComboBoxes()->AddComboBox(10, 5, 30, 30);
-	ComboBoxes->SetListFillRange(sheet->GetRange(L"A14:A15"));
+	ComboBoxes->SetListFillRange(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A14:A15")));
 	CopyShapes->GetTypedComboBoxes()->AddCopy(ComboBoxes);
 
 	//Save to file.

@@ -8,15 +8,15 @@ int main() {
 	wstring outputFile = outputFolder + L"WriteImages_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Add an image to the specific cell
-	sheet->GetPictures()->XlsPicturesCollection::Add(14, 5, inputImage.c_str());
+	dynamic_pointer_cast<XlsPicturesCollection>(sheet->GetPictures())->Add(14, 5, inputImage.c_str());
 
-	//Save to file
+	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
 }

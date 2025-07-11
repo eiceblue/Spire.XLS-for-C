@@ -9,7 +9,7 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
@@ -18,7 +18,7 @@ int main() {
 	wstring* content = new wstring();
 	for (int i = 0; i < workbook->GetWorksheets()->GetCount(); i++)
 	{
-		Worksheet* sheet = workbook->GetWorksheets()->Get(i);
+		intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(i));
 		content->append(sheet->GetName());
 	}
 

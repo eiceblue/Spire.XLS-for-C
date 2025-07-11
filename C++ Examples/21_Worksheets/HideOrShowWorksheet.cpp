@@ -8,15 +8,15 @@ int main() {
 	std::wstring outputFile = output_path + L"HideOrShowWorksheet.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Hide the sheet named "Sheet1"
-	workbook->GetWorksheets()->Get(L"Sheet1")->SetVisibility(WorksheetVisibility::Hidden);
+	dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(L"Sheet1"))->SetVisibility(WorksheetVisibility::Hidden);
 	//Show the second sheet
-	workbook->GetWorksheets()->Get(1)->SetVisibility(WorksheetVisibility::Visible);
+	dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(1))->SetVisibility(WorksheetVisibility::Visible);
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

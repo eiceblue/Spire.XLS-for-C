@@ -8,10 +8,10 @@ int main() {
 	wstring outputFile = output_path + L"AddImageHyperlink.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Add the description text
 	sheet->GetColumns()->GetItem(0)->SetColumnWidth(22);
@@ -19,7 +19,7 @@ int main() {
 	sheet->GetRange(L"A1")->GetStyle()->SetVerticalAlignment(VerticalAlignType::Top);
 
 	//Insert an image to a specific cell
-	ExcelPicture* picture = dynamic_cast<ExcelPicture*>(sheet->GetPictures()->Add(2, 1, picPath.c_str()));
+	intrusive_ptr<ExcelPicture> picture = ExcelPicture::Dynamic_cast<ExcelPicture>(sheet->GetPictures()->Add(2, 1, picPath.c_str()));
 	//Add a hyperlink to the image
 	picture->SetHyperLink(L"https://www.e-iceblue.com/Introduce/excel-for-net-introduce.html", true);
 

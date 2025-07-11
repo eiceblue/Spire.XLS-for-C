@@ -8,26 +8,26 @@ int main() {
 	wstring outputFile = output_path + L"SetFormulaWithNamedRange.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create a named range
-	INamedRange* NamedRange = workbook->GetNameRanges()->Add(L"MyNamedRange");
+	intrusive_ptr<INamedRange> NamedRange = workbook->GetNameRanges()->Add(L"MyNamedRange");
 	//Refers to range
-	NamedRange->SetRefersToRange(sheet->GetRange(L"B10:B12"));
+	NamedRange->SetRefersToRange(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B10:B12")));
 
 	//Set the formula of range to named range
-	sheet->GetRange(L"B13")->SetFormula(L"=SUM(MyNamedRange)");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B13"))->SetFormula(L"=SUM(MyNamedRange)");
 
 	//Set value of ranges
-	sheet->GetRange(L"B10")->SetNumberValue(10);
-	sheet->GetRange(L"B11")->SetNumberValue(20);
-	sheet->GetRange(L"B12")->SetNumberValue(30);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B10"))->SetNumberValue(10);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B11"))->SetNumberValue(20);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B12"))->SetNumberValue(30);
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

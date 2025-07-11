@@ -10,26 +10,26 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Specify a cell by its name.
-	CellRange* cell = sheet->GetRange(L"A2");
+	intrusive_ptr<CellRange> cell = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A2"));
 
-	wstring* content = new wstring();
+	std::wstring* content = new std::wstring();
 
-	//Get vaule of cell "A2".
+	//Get vaule of cell L"A2".
 	wstring cellValue = cell->GetValue();
 	content->append(L"The vaule of cell A2 is: " + cellValue);
 
 	//Save to file.
 	ofs.open(outputFile, ios::out);
-	ofs << *content << endl;
+	ofs << content << endl;
 	ofs.close();
 	workbook->Dispose();
 }

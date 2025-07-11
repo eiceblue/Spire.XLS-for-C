@@ -8,7 +8,7 @@ int main() {
 	std::wstring outputFile = output_path + L"LinkToContentProperty.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
@@ -16,8 +16,8 @@ int main() {
 	//Add a custom document property
 	workbook->GetCustomDocumentProperties()->Add(L"Test", L"MyNamedRange");
 	//Get the added document property
-	ICustomDocumentProperties* properties = workbook->GetCustomDocumentProperties();
-	IDocumentProperty* property_Renamed = properties->Get(L"Test");
+	intrusive_ptr<ICustomDocumentProperties> properties = workbook->GetCustomDocumentProperties();
+	intrusive_ptr<IDocumentProperty> property_Renamed = properties->Get(L"Test");
 	//Link to content 
 	property_Renamed->SetLinkToContent(true);
 

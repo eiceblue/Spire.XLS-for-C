@@ -8,13 +8,13 @@ int main() {
 	wstring outputFile = output + L"ActivateWorksheet.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the second worksheet from the workbook
-	Worksheet* sheet = workbook->GetWorksheets()->Get(1);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(1));
 
 	//Activate the sheet
 	sheet->Activate();

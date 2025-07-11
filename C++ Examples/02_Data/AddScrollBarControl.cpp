@@ -6,18 +6,18 @@ int main() {
 	wstring outputFile = output_path + L"AddScrollBarControl.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Set a value for range B10
-	sheet->GetRange(L"B10")->SetValue(to_wstring(1).c_str());
-	sheet->GetRange(L"B10")->GetStyle()->GetFont()->SetIsBold(true);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B10"))->SetValue(std::to_wstring(1).c_str());
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B10"))->GetStyle()->GetFont()->SetIsBold(true);
 
 	//Add scroll bar control
-	IScrollBarShape* scrollBar = sheet->GetScrollBarShapes()->AddScrollBar(10, 3, 150, 20);
-	scrollBar->SetLinkedCell(sheet->GetRange(L"B10"));
+	intrusive_ptr<IScrollBarShape> scrollBar = sheet->GetScrollBarShapes()->AddScrollBar(10, 3, 150, 20);
+	scrollBar->SetLinkedCell(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B10")));
 	scrollBar->SetMin(1);
 	scrollBar->SetMax(150);
 	scrollBar->SetIncrementalChange(1);

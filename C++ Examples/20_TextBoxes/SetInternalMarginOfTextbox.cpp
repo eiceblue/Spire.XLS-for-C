@@ -8,16 +8,16 @@ int main() {
 	wstring outputFile = output + L"SetInternalMarginOfTextbox.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Add a textbox to the sheet and set its position and size.
-	XlsTextBoxShape* textbox = dynamic_cast<XlsTextBoxShape*>(sheet->GetTextBoxes()->AddTextBox(4, 2, 100, 300));
+	intrusive_ptr<XlsTextBoxShape> textbox = dynamic_pointer_cast<XlsTextBoxShape>(sheet->GetTextBoxes()->AddTextBox(4, 2, 100, 300));
 
 	//Set the text on the textbox.
 	textbox->SetText(L"Insert TextBox in Excel and set the margin for the text");

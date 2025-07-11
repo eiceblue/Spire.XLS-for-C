@@ -8,12 +8,15 @@ int main() {
    	wstring outputFile = output_path + L"ToCSVWithFilteredValue.csv";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
+	//Get the first worksheet
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
+
 	//Convert to CSV file with filtered value
-	workbook->GetWorksheets()->Get(0)->SaveToFile(outputFile.c_str(), L";", false);
+	dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0))->SaveToFile(outputFile.c_str(), L";", false);
 	workbook->Dispose();
 }

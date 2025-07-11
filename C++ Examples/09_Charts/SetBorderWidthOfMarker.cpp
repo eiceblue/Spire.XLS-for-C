@@ -8,13 +8,13 @@ int main() {
 	wstring outputFile = output_path + L"SetBorderWidthOfMarker.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the chart from the first worksheet
-	Chart* chart = workbook->GetWorksheets()->Get(0)->GetCharts()->Get(0);
+	intrusive_ptr<Chart> chart = dynamic_pointer_cast<Chart>(dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0))->GetCharts()->Get(0));
 
 	chart->GetSeries()->Get(0)->GetDataFormat()->SetMarkerBorderWidth(1.5); //unit is pt
 

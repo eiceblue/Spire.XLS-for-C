@@ -8,25 +8,25 @@ int main() {
 	wstring outputFile = output_path + L"FilterCellsByCellColor_result.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create an auto filter in the sheet and specify the range to be filterd
-	sheet->GetAutoFilters()->SetRange(sheet->GetRange(L"G1:G19"));
+	sheet->GetAutoFilters()->SetRange(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"G1:G19")));
 
 	//Get the coloumn to be filterd
-	FilterColumn* filtercolumn = sheet->GetAutoFilters()->Get(0);
+	intrusive_ptr<FilterColumn> filtercolumn = sheet->GetAutoFilters()->Get(0);
 
 	//Add a color filter to filter the column based on cell color
-	(dynamic_cast<AutoFiltersCollection*>(sheet->GetAutoFilters()))->AddFillColorFilter(filtercolumn, Spire::Common::Color::GetRed());
+	(dynamic_pointer_cast<AutoFiltersCollection>(sheet->GetAutoFilters()))->AddFillColorFilter(filtercolumn, Spire::Xls::Color::GetRed());
 
 	//Filter the data.
-	(dynamic_cast<AutoFiltersCollection*>(sheet->GetAutoFilters()))->Filter();
+	(dynamic_pointer_cast<AutoFiltersCollection>(sheet->GetAutoFilters()))->Filter();
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

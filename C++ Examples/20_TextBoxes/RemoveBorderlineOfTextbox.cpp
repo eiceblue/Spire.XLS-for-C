@@ -6,20 +6,20 @@ int main() {
 	wstring outputFile = output + L"RemoveBorderlineOfTextbox.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 	workbook->SetVersion(ExcelVersion::Version2013);
 
 	//Create a new worksheet named "Remove Borderline" and add a chart to the worksheet.
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 	sheet->SetName(L"Remove Borderline");
-	Spire::Xls::Chart* chart = sheet->GetCharts()->Add();
+	intrusive_ptr<Spire::Xls::Chart> chart = sheet->GetCharts()->Add();
 
 	//Create textbox1 in the chart and input text information.
-	XlsTextBoxShape* textbox1 = dynamic_cast<XlsTextBoxShape*>(chart->GetTextBoxes()->AddTextBox(50, 50, 100, 600));
+	intrusive_ptr<XlsTextBoxShape> textbox1 = dynamic_pointer_cast<XlsTextBoxShape>(chart->GetTextBoxes()->AddTextBox(50, 50, 100, 600));
 	textbox1->SetText(L"The solution with borderline");
 
 	//Create textbox2 in the chart, input text information and remove borderline.
-	XlsTextBoxShape* textbox2 = dynamic_cast<XlsTextBoxShape*>(chart->GetTextBoxes()->AddTextBox(1000, 50, 100, 600));
+	intrusive_ptr<XlsTextBoxShape> textbox2 = dynamic_pointer_cast<XlsTextBoxShape>(chart->GetTextBoxes()->AddTextBox(1000, 50, 100, 600));
 	textbox2->SetText(L"The solution without borderline");
 	textbox2->GetLine()->SetWeight(0);
 

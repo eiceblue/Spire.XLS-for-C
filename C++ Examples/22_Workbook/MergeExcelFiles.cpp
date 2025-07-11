@@ -7,23 +7,23 @@ int main() {
 	std::wstring outputFile = output_path + L"MergeExcelFiles.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	std::vector<std::wstring> files;
 	files.push_back(input_path + L"MergeExcelFiles-1.xlsx");
 	files.push_back(input_path + L"MergeExcelFiles-2.xls");
 	files.push_back(input_path + L"MergeExcelFiles-3.xlsx");
 
-	Workbook* newbook = new Workbook();
+	intrusive_ptr<Workbook> newbook = new Workbook();
 	newbook->SetVersion(ExcelVersion::Version2013);
 	//Clear all worksheets
 	newbook->GetWorksheets()->Clear();
 
 	//Create a workbook
-	Workbook* tempbook = new Workbook();
+	intrusive_ptr<Workbook> tempbook = new Workbook();
 
 	for (auto file : files)
 	{
@@ -31,9 +31,9 @@ int main() {
 		tempbook->LoadFromFile(file.c_str());
 		for (int i = 0; i < tempbook->GetWorksheets()->GetCount(); i++)
 		{
-			Worksheet* sheet = tempbook->GetWorksheets()->Get(i);
+			intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(tempbook->GetWorksheets()->Get(i));
 			//Copy every sheet in a workbook
-			(dynamic_cast<XlsWorksheetsCollection*>(newbook->GetWorksheets()))->AddCopy(sheet, WorksheetCopyType::CopyAll);
+			(dynamic_pointer_cast<XlsWorksheetsCollection>(newbook->GetWorksheets()))->AddCopy(sheet, WorksheetCopyType::CopyAll);
 		}
 	}
 

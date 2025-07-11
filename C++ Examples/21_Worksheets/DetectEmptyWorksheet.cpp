@@ -9,19 +9,19 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* worksheet1 = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> worksheet1 = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Detect the first worksheet is empty or not
 	bool detect1 = worksheet1->GetIsEmpty();
 
 	//Get the second worksheet
-	Worksheet* worksheet2 = workbook->GetWorksheets()->Get(1);
+	intrusive_ptr<Worksheet> worksheet2 = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(1));
 
 	//Detect the second worksheet is empty or not
 	bool detect2 = worksheet2->GetIsEmpty();

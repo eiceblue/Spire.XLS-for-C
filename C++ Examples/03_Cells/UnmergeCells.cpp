@@ -8,19 +8,19 @@ int main() {
 	wstring outputFile = outputFolder + L"UnmergeCells_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Unmerge the cells.
-	sheet->GetRange(L"F2")->UnMerge();
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"F2"))->UnMerge();
 
 	//Unmerge the cells.
-	sheet->GetRange(L"F7")->UnMerge();
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"F7"))->UnMerge();
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

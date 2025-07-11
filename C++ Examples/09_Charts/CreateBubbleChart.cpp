@@ -9,21 +9,21 @@ int main() {
 	wstring outputFile = output_path + L"CreateBubbleChart_result.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Add a chart
-	Chart* chart = sheet->GetCharts()->Add(ExcelChartType::Bubble);
+	intrusive_ptr<Chart> chart = sheet->GetCharts()->Add(ExcelChartType::Bubble);
 
 	//Set region of chart data
-	chart->SetDataRange(sheet->GetRange(L"A1:C5"));
+	chart->SetDataRange(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:C5")));
 	chart->SetSeriesDataFromRange(false);
-	chart->GetSeries()->Get(0)->SetBubbles(sheet->GetRange(L"C2:C5"));
+	chart->GetSeries()->Get(0)->SetBubbles(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"C2:C5")));
 	//Set position of chart
 	chart->SetLeftColumn(7);
 	chart->SetTopRow(6);

@@ -8,7 +8,7 @@ int main() {
 	std::wstring outputFile_xlsx = output_path + L"SaveFiles_ToXlsx.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());

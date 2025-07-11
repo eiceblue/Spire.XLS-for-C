@@ -9,19 +9,19 @@ int main() {
 	wstring outputFile = output_path + L"CreatePivotChart.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//get the first pivot table in the worksheet
-	IPivotTable* pivotTable = sheet->GetPivotTables()->Get(0);
+	intrusive_ptr<IPivotTable> pivotTable = sheet->GetPivotTables()->Get(0);
 
 	//create a clustered column chart based on the pivot table
-	Chart* chart = sheet->GetCharts()->Add(ExcelChartType::ColumnClustered, pivotTable);
+	intrusive_ptr<Chart> chart = sheet->GetCharts()->Add(ExcelChartType::ColumnClustered, pivotTable);
 	//set chart position
 	chart->SetTopRow(10);
 	chart->SetLeftColumn(1);

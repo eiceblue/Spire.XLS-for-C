@@ -6,20 +6,20 @@ int main() {
 	wstring outputFile = output_path + L"UsePredefinedStyles.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create a new style
-	CellStyle* style = workbook->GetStyles()->Add(L"newStyle");
+	intrusive_ptr<CellStyle> style = workbook->GetStyles()->Add(L"newStyle");
 	style->GetFont()->SetFontName(L"Calibri");
 	style->GetFont()->SetIsBold(true);
 	style->GetFont()->SetSize(15);
-	style->GetFont()->SetColor(Spire::Common::Color::GetCornflowerBlue());
+	style->GetFont()->SetColor(Spire::Xls::Color::GetCornflowerBlue());
 
 	//Get "B5" cell
-	CellRange* range = sheet->GetRange(L"B5");
+	intrusive_ptr<CellRange> range = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B5"));
 	range->SetText(L"Welcome to use Spire.XLS");
 	range->SetCellStyleName(style->GetName());
 	range->AutoFitColumns();

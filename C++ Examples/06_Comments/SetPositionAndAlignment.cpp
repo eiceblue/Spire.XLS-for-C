@@ -6,26 +6,26 @@ int main() {
     wstring outputFile = output_path + L"SetPositionAndAlignment.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Set two font styles which will be used in comments
-	ExcelFont* font1 = workbook->CreateExcelFont();
+	intrusive_ptr<ExcelFont> font1 = workbook->CreateExcelFont();
 	font1->SetFontName(L"Calibri");
-	font1->SetColor(Spire::Common::Color::GetFirebrick());
+	font1->SetColor(Spire::Xls::Color::GetFirebrick());
 	font1->SetIsBold(true);
 	font1->SetSize(12);
-	ExcelFont* font2 = workbook->CreateExcelFont();
+	intrusive_ptr<ExcelFont> font2 = workbook->CreateExcelFont();
 	font2->SetFontName(L"Calibri");
-	font2->SetColor(Spire::Common::Color::GetBlue());
+	font2->SetColor(Spire::Xls::Color::GetBlue());
 	font2->SetSize(12);
 	font2->SetIsBold(true);
 
 	//Add comment 1 and set its size, text, position and alignment
-	sheet->GetRange(L"G5")->SetText(L"Spire.XLS");
-	IComment* Comment1 = sheet->GetRange(L"G5")->GetComment();
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"G5"))->SetText(L"Spire.XLS");
+	intrusive_ptr<IComment> Comment1 = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"G5"))->GetComment();
 	Comment1->SetIsVisible(true);
 	Comment1->SetHeight(150);
 	Comment1->SetWidth(300);
@@ -40,8 +40,8 @@ int main() {
 	Comment1->SetHAlignment(CommentHAlignType::Justified);
 
 	//Add comment2 and set its size, text, position and alignment for comparison
-	sheet->GetRange(L"D14")->SetText(L"E-iceblue");
-	IComment* Comment2 = sheet->GetRange(L"D14")->GetComment();
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"D14"))->SetText(L"E-iceblue");
+	intrusive_ptr<IComment> Comment2 = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"D14"))->GetComment();
 	Comment2->SetIsVisible(true);
 	Comment2->SetHeight(150);
 	Comment2->SetWidth(300);

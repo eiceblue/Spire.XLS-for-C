@@ -6,10 +6,10 @@ int main() {
 	wstring outputFile = output + L"SetExcelPaperSize.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Set the paper size of the worksheet as A4 paper.
 	sheet->GetPageSetup()->SetPaperSize(PaperSizeType::PaperA4);

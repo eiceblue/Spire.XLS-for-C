@@ -8,24 +8,23 @@ int main() {
 	wstring outputFile = outputFolder + L"CopyOnlyFormulaValue_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	//Set the copy option--OnlyCopyFormulaValue
+	//Set the copy option
 	CopyRangeOptions copyOptions = CopyRangeOptions::OnlyCopyFormulaValue;
 
-	//Copy ranges
-	CellRange* sourceRange = sheet->GetRange(L"A6:E6");
-	sheet->Copy(sourceRange, sheet->GetRange(L"A8:E8"), copyOptions);
+	intrusive_ptr<CellRange> sourceRange = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A6:E6"));
+	sheet->Copy(sourceRange, dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A8:E8")), copyOptions);
 
-	sourceRange->Copy(sheet->GetRange(L"A10:E10"), copyOptions);
+	sourceRange->Copy(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A10:E10")), copyOptions);
 
-	//Save to file
+	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
 }

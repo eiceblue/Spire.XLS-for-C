@@ -6,13 +6,13 @@ int main() {
 	wstring outputFile = output_path + L"Indentation.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Access the "B5" cell from the worksheet
-	CellRange* cell = sheet->GetRange(L"B5");
+	intrusive_ptr<CellRange> cell = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B5"));
 
 	//Add some value to the "B5" cell
 	cell->SetText(L"Hello Spire!");

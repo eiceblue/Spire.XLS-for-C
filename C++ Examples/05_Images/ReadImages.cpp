@@ -8,15 +8,16 @@ int main() {
 	wstring outputFile = outputFolder + L"ReadImages_out.png";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the first image
-	XlsBitmapShape* pic = sheet->GetPictures()->Get(0);
-	pic->GetPicture()->Save(outputFile.c_str(), Spire::Common::ImageFormat::GetPng());
+	intrusive_ptr<XlsBitmapShape> pic = sheet->GetPictures()->Get(0);
+	pic->GetPicture()->Save(outputFile.c_str());
+	workbook->Dispose();
 }

@@ -8,13 +8,13 @@ int main() {
 	std::wstring outputFile = output_path + L"SetViewMode.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Set the view mode 
-	workbook->GetWorksheets()->Get(0)->SetViewMode(ViewMode::Preview);
+	dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0))->SetViewMode(ViewMode::Preview);
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

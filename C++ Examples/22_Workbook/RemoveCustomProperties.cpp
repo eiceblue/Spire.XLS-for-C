@@ -8,13 +8,13 @@ int main() {
 	std::wstring outputFile = output_path + L"RemoveCustomProperties.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Retrieve a list of all custom document properties of the Excel file
-	ICustomDocumentProperties* customDocumentProperties = workbook->GetCustomDocumentProperties();
+	intrusive_ptr<ICustomDocumentProperties> customDocumentProperties = workbook->GetCustomDocumentProperties();
 
 	//Remove "Editor" custom document property
 	customDocumentProperties->Remove(L"Editor");

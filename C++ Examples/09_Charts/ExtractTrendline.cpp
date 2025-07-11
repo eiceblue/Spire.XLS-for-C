@@ -10,23 +10,24 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the chart from the first worksheet
-	Chart* chart = workbook->GetWorksheets()->Get(0)->GetCharts()->Get(0);
+	intrusive_ptr<Chart> chart = dynamic_pointer_cast<Chart>(dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0))->GetCharts()->Get(0));
 
 	//Get the trendline of the chart and then extract the equation of the trendline
-	IChartTrendLine* trendLine = chart->GetSeries()->Get(1)->GetTrendLines()->GetItem(0);
+	intrusive_ptr<IChartTrendLine> trendLine = chart->GetSeries()->Get(1)->GetTrendLines()->GetItem(0);
 	wstring formula = trendLine->GetFormula();
-	wstring* content = new wstring();
-	content->append(L"The equation is: " + formula + L"\r\n");
+	std::wstring* content = new std::wstring();
+	content->append(L"The equation is: ");
+	content->append(formula);
+	std::wfstream out;
+	out.open(outputFile, ios::out);
 
-	//Save to file.
-	ofs.open(outputFile, ios::out);
-	ofs << *content << endl;
-	ofs.close();
+	out << *content << endl;
+	out.close();
 	workbook->Dispose();
 }

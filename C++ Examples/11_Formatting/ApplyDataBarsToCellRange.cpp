@@ -6,33 +6,33 @@ int main() {
 	wstring outputFile = output_path + L"ApplyDataBarsToCellRange.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Insert data to cell range from A1 to C4.
-	sheet->GetRange(L"A1")->SetNumberValue(582);
-	sheet->GetRange(L"A2")->SetNumberValue(234);
-	sheet->GetRange(L"A3")->SetNumberValue(314);
-	sheet->GetRange(L"A4")->SetNumberValue(50);
-	sheet->GetRange(L"B1")->SetNumberValue(150);
-	sheet->GetRange(L"B2")->SetNumberValue(894);
-	sheet->GetRange(L"B3")->SetNumberValue(560);
-	sheet->GetRange(L"B4")->SetNumberValue(900);
-	sheet->GetRange(L"C1")->SetNumberValue(134);
-	sheet->GetRange(L"C2")->SetNumberValue(700);
-	sheet->GetRange(L"C3")->SetNumberValue(920);
-	sheet->GetRange(L"C4")->SetNumberValue(450);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1"))->SetNumberValue(582);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A2"))->SetNumberValue(234);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A3"))->SetNumberValue(314);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A4"))->SetNumberValue(50);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B1"))->SetNumberValue(150);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B2"))->SetNumberValue(894);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B3"))->SetNumberValue(560);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B4"))->SetNumberValue(900);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"C1"))->SetNumberValue(134);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"C2"))->SetNumberValue(700);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"C3"))->SetNumberValue(920);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"C4"))->SetNumberValue(450);
 	sheet->GetAllocatedRange()->SetRowHeight(15);
 	sheet->GetAllocatedRange()->SetColumnWidth(17);
 
 	//Add data bars.
-	XlsConditionalFormats* xcfs = sheet->GetConditionalFormats()->Add();
+	intrusive_ptr<XlsConditionalFormats> xcfs = sheet->GetConditionalFormats()->Add();
 	xcfs->AddRange(sheet->GetAllocatedRange());
-	IConditionalFormat* format = xcfs->AddCondition();
+	intrusive_ptr<IConditionalFormat> format = xcfs->AddCondition();
 	format->SetFormatType(ConditionalFormatType::DataBar);
-	format->GetDataBar()->SetBarColor(Spire::Common::Color::GetCadetBlue());
+	format->GetDataBar()->SetBarColor(Spire::Xls::Color::GetCadetBlue());
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

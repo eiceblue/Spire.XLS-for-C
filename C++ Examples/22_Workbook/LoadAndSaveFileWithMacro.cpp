@@ -8,15 +8,15 @@ int main(){
 	std::wstring outputFile = output_path + L"LoadAndSaveFileWithMacro.xls";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	sheet->GetRange(L"A5")->SetText(L"This is a simple test!");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A5"))->SetText(L"This is a simple test!");
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version97to2003);

@@ -8,11 +8,11 @@ int main() {
 	std::wstring outputFile = output_path + L"ReadStream.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Open excel from a stream
 	ifstream inputf(inputFile.c_str(), ios::in | ios::binary);
-	Stream* stream = new Stream(inputf);
+	intrusive_ptr<Stream> stream = new Stream(inputf);
 
 	workbook->LoadFromStream(stream);
 

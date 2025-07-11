@@ -8,30 +8,31 @@ int main() {
 	wstring outputFile = output_path + L"RetrieveAndExtractData_result.xlsx";
 
 	// Create a new workbook instance and get the first worksheet.
-	Workbook* newBook = new Workbook();
-	Worksheet* newSheet = newBook->GetWorksheets()->Get(0);
+	intrusive_ptr<Workbook> newBook = new Workbook();
+	intrusive_ptr<Worksheet> newSheet = dynamic_pointer_cast<Worksheet>(newBook->GetWorksheets()->Get(0));
 
 	//Create a new workbook instance and load the sample Excel file.
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet.
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Retrieve data and extract it to the first worksheet of the new excel workbook.
-	int i = 1;
+	int k = 1;
 	int columnCount = sheet->GetColumns()->GetCount();
-
+	//for (intrusive_ptr<XlsRange> range : sheet->GetColumns()[0]->GetCells())
+	//{
 	for (int i = 0; i < sheet->GetColumns()->GetItem(0)->GetCells()->GetCount(); i++)
 	{
-		XlsRange* range = sheet->GetColumns()->GetItem(0)->GetCells()->GetItem(i);
+		intrusive_ptr<XlsRange> range = sheet->GetColumns()->GetItem(0)->GetCells()->GetItem(i);
 		if (wcscmp(range->GetText(), L"teacher") == 0)
 		{
 			int x = range->GetRow();
-			CellRange* sourceRange = sheet->GetRange(range->GetRow(), 1, range->GetRow(), columnCount);
-			CellRange* destRange = newSheet->GetRange(i, 1, i, columnCount);
+			intrusive_ptr<CellRange> sourceRange = dynamic_pointer_cast<CellRange>(sheet->GetRange(range->GetRow(), 1, range->GetRow(), columnCount));
+			intrusive_ptr<CellRange> destRange = dynamic_pointer_cast<CellRange>(newSheet->GetRange(k + 1, 1, k + 1, columnCount));
 			sheet->Copy(sourceRange, destRange, true);
-			i++;
+			k++;
 		}
 	}
 

@@ -9,19 +9,19 @@ int main() {
 	wstring outputFile = output_path + L"ChangeDataRange.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get chart
-	Chart* chart = sheet->GetCharts()->Get(0);
+	intrusive_ptr<Chart> chart = dynamic_pointer_cast<Chart>(sheet->GetCharts()->Get(0));
 
 	//Change data range
-	chart->SetDataRange(sheet->GetRange(L"A1:C4"));
+	chart->SetDataRange(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:C4")));
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

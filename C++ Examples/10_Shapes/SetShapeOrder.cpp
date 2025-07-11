@@ -8,23 +8,23 @@ int main() {
 	wstring outputFile = output_path + L"SetShapeOrder.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Bring the picture forward one level
-	workbook->GetWorksheets()->Get(0)->GetPictures()->Get(0)->ChangeLayer(ShapeLayerChangeType::BringForward);
+	dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0))->GetPictures()->Get(0)->ChangeLayer(ShapeLayerChangeType::BringForward);
 
 	//Bring the image in fron of all other objects
-	workbook->GetWorksheets()->Get(1)->GetPictures()->Get(0)->ChangeLayer(ShapeLayerChangeType::BringToFront);
+	dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(1))->GetPictures()->Get(0)->ChangeLayer(ShapeLayerChangeType::BringToFront);
 
 	//Send the shape back one level
-	XlsShape* shape = dynamic_cast<XlsShape*>(workbook->GetWorksheets()->Get(2)->GetPrstGeomShapes()->Get(1));
+	intrusive_ptr<XlsShape> shape = dynamic_pointer_cast<XlsShape>(dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(2))->GetPrstGeomShapes()->Get(1));
 	shape->ChangeLayer(ShapeLayerChangeType::SendBackward);
 
 	//Send the shape behind all other objects
-	shape = dynamic_cast<XlsShape*>(workbook->GetWorksheets()->Get(3)->GetPrstGeomShapes()->Get(1));
+	shape = dynamic_pointer_cast<XlsShape>(dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(3))->GetPrstGeomShapes()->Get(1));
 	shape->ChangeLayer(ShapeLayerChangeType::SendToBack);
 
 	//Save to file.

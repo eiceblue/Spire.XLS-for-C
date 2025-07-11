@@ -7,25 +7,24 @@ int main() {
     	wstring output_path = OUTPUTPATH;
     	wstring outputFile = output_path + L"CSVToPDF.pdf";
 
-	//Create a workbook
-	Workbook* workbook = new Workbook();
+		intrusive_ptr<Workbook> workbook = new Workbook();
 
-	//Load the Excel document from disk
-	workbook->LoadFromFile(inputFile.c_str(), L",");
+		//Load the Excel document from disk
+		workbook->LoadFromFile(inputFile.c_str(), L",");
 
-	//Set the SheetFitToPage property as true
-	workbook->GetConverterSetting()->SetSheetFitToPage(true);
+		//Set the SheetFitToPage property as true
+		workbook->GetConverterSetting()->SetSheetFitToPage(true);
 
-	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+		//Get the first worksheet
+		intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	//Autofit a column if the characters in the column exceed column width
-	for (int i = 1; i < sheet->GetColumns()->GetCount(); i++)
-	{
-		sheet->AutoFitColumn(i);
-	}
+		//Autofit a column if the characters in the column exceed column width
+		for (int i = 1; i < sheet->GetColumns()->GetCount(); i++)
+		{
+			sheet->AutoFitColumn(i);
+		}
 
-	//Save to file.
-	workbook->SaveToFile(outputFile.c_str(), FileFormat::PDF);
-	workbook->Dispose();
+		//Save to file.
+		workbook->SaveToFile(outputFile.c_str(), FileFormat::PDF);
+		workbook->Dispose();
 }

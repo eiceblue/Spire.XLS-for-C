@@ -6,13 +6,13 @@ int main() {
 	wstring outputFile = output_path + L"FormatARow.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create a new style
-	CellStyle* style = workbook->GetStyles()->Add(L"newStyle");
+	intrusive_ptr<CellStyle> style = workbook->GetStyles()->Add(L"newStyle");
 
 	//Set the vertical alignment of the text
 	style->SetVerticalAlignment(VerticalAlignType::Center);
@@ -21,13 +21,13 @@ int main() {
 	style->SetHorizontalAlignment(HorizontalAlignType::Center);
 
 	//Set the font color of the text
-	style->GetFont()->SetColor(Spire::Common::Color::GetBlue());
+	style->GetFont()->SetColor(Spire::Xls::Color::GetBlue());
 
 	//Shrink the text to fit in the cell
 	style->SetShrinkToFit(true);
 
 	//Set the bottom border color of the cell to OrangeRed
-	style->GetBorders()->Get(BordersLineType::EdgeBottom)->SetColor(Spire::Common::Color::GetOrangeRed());
+	style->GetBorders()->Get(BordersLineType::EdgeBottom)->SetColor(Spire::Xls::Color::GetOrangeRed());
 
 	//Set the bottom border type of the cell to Dotted
 	style->GetBorders()->Get(BordersLineType::EdgeBottom)->SetLineStyle(LineStyleType::Dotted);

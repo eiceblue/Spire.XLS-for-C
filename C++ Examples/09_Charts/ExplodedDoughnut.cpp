@@ -7,37 +7,37 @@ int main() {
 	wstring outputFile = output_path + L"ExplodedDoughnut.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 	sheet->SetName(L"ExplodedDoughnut");
 
 	//Set chart data
-	sheet->GetRange(L"A1")->SetValue(L"Country");
-	sheet->GetRange(L"A2")->SetValue(L"Cuba");
-	sheet->GetRange(L"A3")->SetValue(L"Mexico");
-	sheet->GetRange(L"A4")->SetValue(L"France");
-	sheet->GetRange(L"A5")->SetValue(L"German");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1"))->SetValue(L"Country");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A2"))->SetValue(L"Cuba");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A3"))->SetValue(L"Mexico");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A4"))->SetValue(L"France");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A5"))->SetValue(L"German");
 
 
-	sheet->GetRange(L"B1")->SetValue(L"Sales");
-	sheet->GetRange(L"B2")->SetNumberValue(6000);
-	sheet->GetRange(L"B3")->SetNumberValue(8000);
-	sheet->GetRange(L"B4")->SetNumberValue(9000);
-	sheet->GetRange(L"B5")->SetNumberValue(8500);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B1"))->SetValue(L"Sales");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B2"))->SetNumberValue(6000);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B3"))->SetNumberValue(8000);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B4"))->SetNumberValue(9000);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B5"))->SetNumberValue(8500);
 
 	//Style
-	sheet->GetRange(L"A1:B1")->SetRowHeight(15);
-	sheet->GetRange(L"A1:B1")->GetStyle()->SetColor(Spire::Common::Color::GetDarkGray());
-	sheet->GetRange(L"A1:B1")->GetStyle()->GetFont()->SetColor(Spire::Common::Color::GetWhite());
-	sheet->GetRange(L"A1:B1")->GetStyle()->SetVerticalAlignment(VerticalAlignType::Center);
-	sheet->GetRange(L"A1:B1")->GetStyle()->SetHorizontalAlignment(HorizontalAlignType::Center);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:B1"))->SetRowHeight(15);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:B1"))->GetStyle()->SetColor(Spire::Common::Color::GetDarkGray());
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:B1"))->GetStyle()->GetFont()->SetColor(Spire::Common::Color::GetWhite());
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:B1"))->GetStyle()->SetVerticalAlignment(VerticalAlignType::Center);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:B1"))->GetStyle()->SetHorizontalAlignment(HorizontalAlignType::Center);
 
-	sheet->GetRange(L"B2:B5")->GetStyle()->SetNumberFormat(L"\"$\"#,##0");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B2:B5"))->GetStyle()->SetNumberFormat(L"\"$\"#,##0");
 
 	//Add a chart
-	Chart* chart = sheet->GetCharts()->Add();
+	intrusive_ptr<Chart> chart = sheet->GetCharts()->Add();
 	chart->SetChartType(ExcelChartType::DoughnutExploded);
 
 	//Set position of chart
@@ -47,7 +47,7 @@ int main() {
 	chart->SetBottomRow(29);
 
 	//Set region of chart data
-	chart->SetDataRange(sheet->GetRange(L"A1:B5"));
+	chart->SetDataRange(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:B5")));
 	chart->SetSeriesDataFromRange(false);
 
 	//Chart title
@@ -57,12 +57,12 @@ int main() {
 
 	for (int i = 0; i < chart->GetSeries()->GetCount(); i++)
 	{
-		ChartSerie* cs = chart->GetSeries()->Get(i);
+		intrusive_ptr<ChartSerie> cs = chart->GetSeries()->Get(i);
 		cs->GetFormat()->GetOptions()->SetIsVaryColor(true);
 		cs->GetDataPoints()->GetDefaultDataPoint()->GetDataLabels()->SetHasValue(true);
 	}
 
-	chart->GetPlotArea()->GetFill()->SetVisible(false);
+	dynamic_pointer_cast<ChartPlotArea>(chart->GetPlotArea())->GetFill()->SetVisible(false);
 	chart->GetLegend()->SetPosition(LegendPositionType::Top);
 
 

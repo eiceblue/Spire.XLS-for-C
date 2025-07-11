@@ -6,13 +6,13 @@ int main() {
 	wstring outputFile = outputFolder + L"UseExplicitLineBreaks_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet1 = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet1 = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Specify a cell range
-	CellRange* c5 = sheet1->GetRange(L"C5");
+	intrusive_ptr<CellRange> c5 = dynamic_pointer_cast<CellRange>(sheet1->GetRange(L"C5"));
 
 	//Set the cell width for specified range
 	sheet1->SetColumnWidth(c5->GetColumn(), 70);

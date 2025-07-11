@@ -8,19 +8,19 @@ int main() {
 	std::wstring outputFile = output_path + L"RemovePageBreak.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Clear all the vertical page breaks
-	dynamic_cast<VPageBreaksCollection*>(sheet->GetVPageBreaks())->Clear();
+	dynamic_pointer_cast<VPageBreaksCollection>(sheet->GetVPageBreaks())->Clear();
 
 	//Remove the firt horizontal Page Break
-	dynamic_cast<HPageBreaksCollection*>(sheet->GetHPageBreaks())->RemoveAt(0);
+	dynamic_pointer_cast<HPageBreaksCollection>(sheet->GetHPageBreaks())->RemoveAt(0);
 
 	//Set the ViewMode as Preview to see how the page breaks work
 	sheet->SetViewMode(ViewMode::Preview);

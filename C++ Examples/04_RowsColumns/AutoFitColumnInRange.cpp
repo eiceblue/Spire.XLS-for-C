@@ -8,18 +8,18 @@ int main() {
 	wstring outputFile = outputFolder + L"AutoFitColumnInRange_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	//Autofit the column of the worksheet
+	//Autofit the Column of the worksheet
 	sheet->AutoFitColumn(2, 2, 5);
 
-	//Save to file
+	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
 }

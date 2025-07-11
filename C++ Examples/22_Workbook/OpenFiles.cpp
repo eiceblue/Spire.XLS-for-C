@@ -11,43 +11,46 @@ int main() {
 	std::wstring outputFile = output_path + L"OpenFiles.txt";
 	wfstream ofs;
 
-	//Create string builder
-	wstring* builder = new wstring();
+
+	//Create wstring builder
+	wstring* content = new wstring();
 
 	//1. Load file by file path
 	//Create a workbook
-	Workbook* workbook1 = new Workbook();
+	intrusive_ptr<Workbook> workbook1 = new Workbook();
 	//Load the document from disk
 	workbook1->LoadFromFile(inputFile.c_str());
-	builder->append(L"Workbook opened using file path successfully!");
+	content->append(L"Workbook opened using file path successfully!");
 
-	//2. Load file by file stream
+	//2. Load file by file stream 
 	ifstream inputf(inputFile.c_str(), ios::in | ios::binary);
-	Stream* stream = new Stream(inputf);
+	intrusive_ptr<Stream> stream = new Stream(inputf);
 	//Create a workbook
-	Workbook* workbook2 = new Workbook();
+	intrusive_ptr<Workbook> workbook2 = new Workbook();
 	//Load the document from disk
 	workbook2->LoadFromStream(stream);
-	builder->append(L"Workbook opened using file stream successfully!");
-	delete stream;
+	content->append(L"\r\nWorkbook opened using file stream successfully!");
+	//delete stream;
 
 	//3. Open Microsoft Excel 97 - 2003 file
-	Workbook* wbExcel97 = new Workbook();
+	intrusive_ptr<Workbook> wbExcel97 = new Workbook();
 	wbExcel97->LoadFromFile(inputFile_97.c_str(), ExcelVersion::Version97to2003);
-	builder->append(L"Microsoft Excel 97 - 2003 workbook opened successfully!");
+	content->append(L"\r\nMicrosoft Excel 97 - 2003 workbook opened successfully!");
 
 	//4. Open xml file
-	Workbook* wbXML = new Workbook();
+	intrusive_ptr<Workbook> wbXML = new Workbook();
 	wbXML->LoadFromXml(inputFile_xml.c_str());
-	builder->append(L"XML file opened successfully!");
+	content->append(L"\r\nXML file opened successfully!");
 
 	//5. Open csv file
-	Workbook* wbCSV = new Workbook();
+	intrusive_ptr<Workbook> wbCSV = new Workbook();
 	wbCSV->LoadFromFile(inputFile_csv.c_str(), L",", 1, 1);
-	builder->append(L"CSV file opened successfully!");
+	content->append(L"\r\nCSV file opened successfully!");
 
 	//Save to file.
-	ofs.open(outputFile, ios::out);
-	ofs << *builder << endl;
-	ofs.close();
+	std::wfstream out;
+	out.open(outputFile, ios::out);
+
+	out << *content << endl;
+	out.close();
 }

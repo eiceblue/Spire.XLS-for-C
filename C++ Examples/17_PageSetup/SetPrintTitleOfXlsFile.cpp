@@ -8,15 +8,15 @@ int main() {
 	wstring outputFile = output + L"SetPrintTitleOfXlsFile.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	PageSetup* pageSetup = sheet->GetPageSetup();
+	intrusive_ptr<PageSetup> pageSetup = dynamic_pointer_cast<PageSetup>(sheet->GetPageSetup());
 
 	//Define column numbers A & B as title columns.
 	pageSetup->SetPrintTitleColumns(L"$A:$B");

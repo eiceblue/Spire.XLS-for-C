@@ -8,24 +8,24 @@ int main() {
 	wstring outputFile = outputFolder + L"PictureRefRange_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	sheet->GetRange(L"A1")->SetValue(L"Spire.XLS");
-	sheet->GetRange(L"B3")->SetValue(L"E-iceblue");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1"))->SetValue(L"Spire.XLS");
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B3"))->SetValue(L"E-iceblue");
 
 	//Get the first picture in worksheet
-	XlsBitmapShape* picture = sheet->GetPictures()->Get(0);
+	intrusive_ptr<XlsBitmapShape> picture = sheet->GetPictures()->Get(0);
 
 	//Set the reference range of the picture to A1:B3
 	picture->SetRefRange(L"A1:B3");
 
-	//Save to file
+	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
 }

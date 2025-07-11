@@ -8,21 +8,21 @@ int main() {
 	wstring outputFile = outputFolder + L"DeleteMultipleRowsAndColumns_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	//Delete 4 rows starting with the fifth row
+	//Delete 4 rows from the fifth row
 	sheet->DeleteRow(5, 4);
 
-	//Delete 2 columns starting with the second column
+	//Delete 2 columns from the second column
 	sheet->DeleteColumn(2, 2);
 
-	//Save to file
+	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
 }

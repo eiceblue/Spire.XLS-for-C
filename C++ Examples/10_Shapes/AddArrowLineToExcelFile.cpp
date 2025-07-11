@@ -6,10 +6,10 @@ int main() {
 	wstring outputFile = output_path + L"AddArrowLineToExcelFile.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Add a Double Arrow and fill the line with solid color.
 	auto line = sheet->GetTypedLines()->AddLine();
@@ -17,7 +17,7 @@ int main() {
 	line->SetLeft(20);
 	line->SetWidth(100);
 	line->SetHeight(0);
-	line->SetColor(Spire::Common::Color::GetBlue());
+	line->SetColor(Spire::Xls::Color::GetBlue());
 	line->SetBeginArrowHeadStyle(ShapeArrowStyleType::LineArrow);
 	line->SetEndArrowHeadStyle(ShapeArrowStyleType::LineArrow);
 	//Add an Arrow and fill the line with solid color.
@@ -26,12 +26,12 @@ int main() {
 	line_1->SetLeft(30);
 	line_1->SetWidth(100);
 	line_1->SetHeight(100);
-	line_1->SetColor(Spire::Common::Color::GetRed());
+	line_1->SetColor(Spire::Xls::Color::GetRed());
 	line_1->SetBeginArrowHeadStyle(ShapeArrowStyleType::LineNoArrow);
 	line_1->SetEndArrowHeadStyle(ShapeArrowStyleType::LineArrow);
 
 	//Add an Elbow Arrow Connector.
-	XlsLineShape* line3 = dynamic_cast<XlsLineShape*>(sheet->GetTypedLines()->AddLine());
+	intrusive_ptr<XlsLineShape> line3 = dynamic_pointer_cast<XlsLineShape>(sheet->GetTypedLines()->AddLine());
 	line3->SetLineShapeType(LineShapeType::ElbowLine);
 	line3->SetWidth(30);
 	line3->SetHeight(50);
@@ -40,7 +40,7 @@ int main() {
 	line3->SetLeft(50);
 
 	//Add an Elbow Double-Arrow Connector.
-	XlsLineShape* line2 = dynamic_cast<XlsLineShape*>(sheet->GetTypedLines()->AddLine());
+	intrusive_ptr<XlsLineShape> line2 = dynamic_pointer_cast<XlsLineShape>(sheet->GetTypedLines()->AddLine());
 	line2->SetLineShapeType(LineShapeType::ElbowLine);
 	line2->SetWidth(50);
 	line2->SetHeight(50);
@@ -50,7 +50,7 @@ int main() {
 	line2->SetTop(100);
 
 	//Add a Curved Arrow Connector.
-	line3 = dynamic_cast<XlsLineShape*>(sheet->GetTypedLines()->AddLine());
+	line3 = dynamic_pointer_cast<XlsLineShape>(sheet->GetTypedLines()->AddLine());
 	line3->SetLineShapeType(LineShapeType::CurveLine);
 	line3->SetWidth(30);
 	line3->SetHeight(50);
@@ -59,7 +59,7 @@ int main() {
 	line3->SetLeft(200);
 
 	//Add a Curved Double-Arrow Connector.
-	line2 = dynamic_cast<XlsLineShape*>(sheet->GetTypedLines()->AddLine());
+	line2 = dynamic_pointer_cast<XlsLineShape>(sheet->GetTypedLines()->AddLine());
 	line2->SetLineShapeType(LineShapeType::CurveLine);
 	line2->SetWidth(30);
 	line2->SetHeight(50);

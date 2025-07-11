@@ -8,15 +8,15 @@ int main() {
 	std::wstring outputFile = output_path + L"CopySheetWithinWorkbook.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first and the second worksheets.
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
-	Worksheet* sheet1 = workbook->GetWorksheets()->Add(L"MySheet");
-	CellRange* sourceRange = sheet->GetAllocatedRange();
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
+	intrusive_ptr<Worksheet> sheet1 = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Add(L"MySheet"));
+	intrusive_ptr<CellRange> sourceRange = dynamic_pointer_cast<CellRange>(sheet->GetAllocatedRange());
 
 	//Copy the first worksheet to the second one.
 	sheet->Copy(sourceRange, sheet1, sheet->GetFirstRow(), sheet->GetFirstColumn(), true);

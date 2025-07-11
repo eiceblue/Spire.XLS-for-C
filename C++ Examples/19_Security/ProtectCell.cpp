@@ -8,17 +8,17 @@ int main() {
 	wstring outputFile = output + L"ProtectCell.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Protect cell
-	sheet->GetRange(L"B3")->GetStyle()->SetLocked(true);
-	sheet->GetRange(L"C3")->GetStyle()->SetLocked(false);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B3"))->GetStyle()->SetLocked(true);
+	dynamic_pointer_cast<CellRange>(sheet->GetRange(L"C3"))->GetStyle()->SetLocked(false);
 
 	sheet->XlsWorksheetBase::Protect(L"TestPassword");
 

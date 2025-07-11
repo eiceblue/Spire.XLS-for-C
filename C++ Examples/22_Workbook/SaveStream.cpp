@@ -8,14 +8,14 @@ int main() {
 	std::wstring outputFile = output_path + L"SaveStream.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Save an excel workbook to stream
 	ofstream outputf(outputFile.c_str(), ios::out | ios::binary);
-	Spire::Common::Stream* stream = new Spire::Common::Stream();
+	intrusive_ptr<Spire::Xls::Stream> stream = new Spire::Xls::Stream();
 	workbook->SaveToStream(stream);
 
 	workbook->Dispose();

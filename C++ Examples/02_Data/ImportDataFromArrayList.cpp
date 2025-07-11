@@ -6,22 +6,22 @@ int main() {
 	wstring outputFile = output_path + L"ImportDataFromArrayList_result.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Create an empty worksheet
 	workbook->CreateEmptySheets(1);
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create an ArrayList object
-	vector<LPCWSTR> list;
+	vector<LPCWSTR_S> list;
 
 	//Add strings in list
-	list.push_back(L"Spire.Doc");
-	list.push_back(L"Spire.XLS");
-	list.push_back(L"Spire.PDF");
-	list.push_back(L"Spire.Presentation");
+	list.push_back(L"Spire.Doc for C++");
+	list.push_back(L"Spire.XLS for C++");
+	list.push_back(L"Spire.PDF for C++");
+	list.push_back(L"Spire.Presentation for C++");
 
 	//Insert arrary list in worksheet 
 	sheet->InsertArray(list, 1, 1, true);

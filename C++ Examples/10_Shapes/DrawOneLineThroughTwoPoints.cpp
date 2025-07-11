@@ -6,13 +6,13 @@ int main() {
 	wstring outputFile = output_path + L"DrawOneLineThroughTwoPoints.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//1)Draw a line according to relative position
-	XlsLineShape* line1 = dynamic_cast<XlsLineShape*>(sheet->GetTypedLines()->AddLine());
+	intrusive_ptr<XlsLineShape> line1 = dynamic_pointer_cast<XlsLineShape>(sheet->GetTypedLines()->AddLine());
 	line1->SetLeftColumn(3);
 	line1->SetTopRow(3);
 	line1->SetLeftColumnOffset(0);
@@ -24,11 +24,11 @@ int main() {
 	line1->SetBottomRowOffset(0);
 
 	//2)Draw a line according to absolute position(pixels).
-	XlsLineShape* line2 = dynamic_cast<XlsLineShape*>(sheet->GetTypedLines()->AddLine());
-	Point* startPoint = new Point();
+	intrusive_ptr<XlsLineShape> line2 = dynamic_pointer_cast<XlsLineShape>(sheet->GetTypedLines()->AddLine());
+	intrusive_ptr<Point> startPoint = new Point();
 	startPoint->SetX(30), startPoint->SetY(50);
 	line2->SetStartPoint(startPoint);
-	Point* endPoint = new Point();
+	intrusive_ptr<Point> endPoint = new Point();
 	endPoint->SetX(20), endPoint->SetY(80);
 	line2->SetEndPoint(endPoint);
 

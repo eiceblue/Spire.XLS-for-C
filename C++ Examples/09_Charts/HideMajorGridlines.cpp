@@ -8,18 +8,17 @@ int main() {
 	wstring inputFile = input_path + L"SampeB_4.xlsx";
 	wstring outputFile = output_path + L"HideMajorGridlines.xlsx";
 
-
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the chart
-	Chart* chart = sheet->GetCharts()->Get(0);
+	intrusive_ptr<Chart> chart = dynamic_pointer_cast<Chart>(sheet->GetCharts()->Get(0));
 
 	//Hide major gridlines
 	chart->GetPrimaryValueAxis()->SetHasMajorGridLines(false);

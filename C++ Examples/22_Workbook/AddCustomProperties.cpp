@@ -8,7 +8,7 @@ int main() {
 	std::wstring outputFile = output_path + L"AddCustomProperties.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
@@ -27,7 +27,7 @@ int main() {
 	t.tm_hour = 8;//beijing zone must +8
 	t.tm_min = 0;
 	t.tm_sec = 0;
-	Spire::Common::DateTime* dt = new Spire::Common::DateTime(2021, 1, 8, 0, 0, 0);
+	intrusive_ptr<Spire::Xls::DateTime> dt = new Spire::Xls::DateTime(2021, 1, 8, 0, 0, 0);
 	workbook->GetCustomDocumentProperties()->Add(L"Revision date", dt);
 
 	//Save to file.

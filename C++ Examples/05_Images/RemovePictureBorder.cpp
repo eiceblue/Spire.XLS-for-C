@@ -8,16 +8,16 @@ int main() {
 	wstring outputFile = outputFolder + L"RemovePictureBorder_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the first picture from the first worksheet
-	XlsBitmapShape* picture = sheet->GetPictures()->Get(0);
+	intrusive_ptr<XlsBitmapShape> picture = sheet->GetPictures()->Get(0);
 
 	//Remove the picture border
 	//Method-1:
@@ -26,7 +26,7 @@ int main() {
 	//Method-2:
 	//picture->GetLine()->SetWeight(0);
 
-	//Save to file
+	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
 }

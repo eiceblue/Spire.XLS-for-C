@@ -8,19 +8,19 @@ int main() {
 	wstring outputFile = output_path + L"CopyCellFormat_result.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Copy the cell format from column 2 and apply to cells of column 5.
 	int count = sheet->GetRows()->GetCount();
 	for (int i = 1; i < count + 1; i++)
 	{
-		sheet->GetRange((L"E" + to_wstring(i)).c_str())->SetStyle(sheet->GetRange((L"B" + to_wstring(i)).c_str())->GetStyle());
+		dynamic_pointer_cast<CellRange>(sheet->GetRange((L"E" + std::to_wstring(i)).c_str()))->SetStyle(dynamic_pointer_cast<CellStyle>(dynamic_pointer_cast<CellRange>(sheet->GetRange((L"B" + std::to_wstring(i)).c_str()))->GetStyle()));
 	}
 
 	//Save to file.

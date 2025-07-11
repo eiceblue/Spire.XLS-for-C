@@ -9,22 +9,22 @@ int main() {
 	std::wstring outputFile = output_path + L"CopyWorksheet.xlsx";
 
 	//Create a workbook
-	Workbook* sourceWorkbook = new Workbook();
+	intrusive_ptr<Workbook> sourceWorkbook = new Workbook();
 
 	//Load the Excel document from disk
 	sourceWorkbook->LoadFromFile(inputFile_1.c_str());
 
 	//Get the first worksheet
-	Worksheet* srcWorksheet = sourceWorkbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> srcWorksheet = dynamic_pointer_cast<Worksheet>(sourceWorkbook->GetWorksheets()->Get(0));
 
 	//Create a workbook
-	Workbook* targetWorkbook = new Workbook();
+	intrusive_ptr<Workbook> targetWorkbook = new Workbook();
 
 	//Load the target Excel document from disk
 	targetWorkbook->LoadFromFile(inputFile_2.c_str());
 
 	//Add a new worksheet
-	Worksheet* targetWorksheet = targetWorkbook->GetWorksheets()->Add(L"added");
+	intrusive_ptr<Worksheet> targetWorksheet = targetWorkbook->GetWorksheets()->Add(L"added");
 
 	//Copy the first worksheet of source Excel document to the new added worksheet of target Excel document
 	targetWorksheet->CopyFrom(srcWorksheet);

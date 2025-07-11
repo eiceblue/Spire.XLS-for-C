@@ -7,20 +7,23 @@ int main() {
     	wstring output_path = OUTPUTPATH;
     	wstring outputFile = output_path + L"ToPdfWithChangePageSize.pdf";
 
-	//Create a workbook
-	Workbook* workbook = new Workbook();
+		//Create a workbook
+		intrusive_ptr<Workbook> workbook = new Workbook();
 
-	//Load the Excel document from disk
-	workbook->LoadFromFile(inputFile.c_str());
+		//Load the Excel document from disk
+		workbook->LoadFromFile(inputFile.c_str());
 
-	for (int i = 0; i < workbook->GetWorksheets()->GetCount(); i++)
-	{
-		Worksheet* sheet = workbook->GetWorksheets()->Get(i);
-		//Change the page size
-		sheet->GetPageSetup()->SetPaperSize(PaperSizeType::PaperA3);
-	}
+		//Get the first worksheet
+		intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	//Save to file.
-	workbook->SaveToFile(outputFile.c_str(), FileFormat::PDF);
-	workbook->Dispose();
+		for (int i = 0; i < workbook->GetWorksheets()->GetCount(); i++)
+		{
+			intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(i));
+			//Change the page size
+			sheet->GetPageSetup()->SetPaperSize(PaperSizeType::PaperA3);
+		}
+
+		//Save to file.
+		workbook->SaveToFile(outputFile.c_str(), FileFormat::PDF);
+		workbook->Dispose();
 }

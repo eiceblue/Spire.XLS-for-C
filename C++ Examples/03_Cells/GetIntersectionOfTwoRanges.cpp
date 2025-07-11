@@ -10,30 +10,32 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the two ranges.
-	CellRange* range = sheet->GetRange(L"A2:D7")->Intersect(sheet->GetRange(L"B2:E8"));
+	intrusive_ptr<CellRange> range = dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A2:D7"))->Intersect(dynamic_pointer_cast<CellRange>(sheet->GetRange(L"B2:E8")));
 
-	wstring* content = new wstring();
-	content->append(L"The intersection of the two ranges \"A2:D7\" and \"B2:E8\" is:\n");
+	std::wstring* content = new std::wstring();
+	content->append(L"The intersection of the two ranges \"A2:D7\" and \"B2:E8\" is:");
 
+	//Get the intersection of the two ranges.
+	//for (auto r : range->GetCells())
+	//{
 	for (int i = 0; i < range->GetCells()->GetCount(); i++)
 	{
-		CellRange* cr = range->GetCells()->GetItem(i);
+		intrusive_ptr<CellRange> cr = range->GetCells()->GetItem(i);
 		content->append(cr->GetValue());
-		content->append(L"\n");
 	}
 
 	//Save to file.
 	ofs.open(outputFile, ios::out);
-	ofs << *content << endl;
+	ofs << content << endl;
 	ofs.close();
 	workbook->Dispose();
 }

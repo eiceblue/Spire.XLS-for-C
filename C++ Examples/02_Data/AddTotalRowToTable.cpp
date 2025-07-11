@@ -8,22 +8,22 @@ int main() {
 	wstring outputFile = output_path + L"AddATotalRowToTable_result.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create a table with the data from the specific cell range.
-	IListObject* table = sheet->GetListObjects()->Create(L"Table", sheet->GetRange(L"A1:D4"));
+	intrusive_ptr<IListObject> table = sheet->GetListObjects()->Create(L"Table", dynamic_pointer_cast<CellRange>(sheet->GetRange(L"A1:D4")));
 
 	//Display total row.
 	table->SetDisplayTotalRow(true);
 
 	//Add a total row.
-	Spire::Common::IList<IListObjectColumn>* list = table->GetColumns();
+	intrusive_ptr<Spire::Xls::IList<IListObjectColumn>> list = table->GetColumns();
 	list->GetItem(0)->SetTotalsRowLabel(L"Total");
 	list->GetItem(1)->SetTotalsCalculation(ExcelTotalsCalculation::Sum);
 	list->GetItem(2)->SetTotalsCalculation(ExcelTotalsCalculation::Sum);

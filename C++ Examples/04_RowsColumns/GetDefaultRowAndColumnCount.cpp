@@ -7,26 +7,24 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Clear all worksheets
 	workbook->GetWorksheets()->Clear();
 
 	//Create a new worksheet
-	Worksheet* sheet = workbook->CreateEmptySheet();
-
-	wstring* builder = new wstring();
+	intrusive_ptr<Worksheet> sheet = workbook->CreateEmptySheet();
+	std::wstring* builder = new std::wstring();
 	//Get row and column count
 	int rowCount = sheet->GetRows()->GetCount();
 	int columnCount = sheet->GetColumns()->GetCount();
 
-	//Append text in string
-	builder->append(L"The default row count is :" + to_wstring(rowCount) + L"\n");
-	builder->append(L"The default column count is :" + to_wstring(columnCount) + L"\n");
+	builder->append(L"The default row count is :" + std::to_wstring(rowCount));
+	builder->append(L"The default column count is :" + std::to_wstring(columnCount));
 
-	//Save to file
+	//Save to file.
 	ofs.open(outputFile, ios::out);
-	ofs << *builder << endl;
+	ofs << builder << endl;
 	ofs.close();
 	workbook->Dispose();
 }

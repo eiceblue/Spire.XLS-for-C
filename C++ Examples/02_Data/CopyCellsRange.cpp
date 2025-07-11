@@ -8,22 +8,22 @@ int main() {
 	wstring outputFile = output_path + L"CopyCellsRange_result.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the first worksheet
-	Worksheet* sheet1 = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet1 = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Specify a destination range 
-	CellRange* cells = sheet1->GetRange(L"G1:H19");
+	intrusive_ptr<CellRange> cells = dynamic_pointer_cast<CellRange>(sheet1->GetRange(L"G1:H19"));
 
 	//Copy the selected range to destination range 
-	sheet1->GetRange(L"B1:C19")->Copy(cells);
+	dynamic_pointer_cast<CellRange>(sheet1->GetRange(L"B1:C19"))->Copy(cells);
 
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);

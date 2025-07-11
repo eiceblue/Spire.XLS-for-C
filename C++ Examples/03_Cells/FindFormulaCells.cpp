@@ -9,28 +9,30 @@ int main() {
 	wfstream ofs;
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	//Find the cells that contain formula "=SUM(A11,A12)"
-	Spire::Common::IList<CellRange>* ranges = sheet->FindAll(L"=SUM(A11,A12)", FindType::Formula, ExcelFindOptions::None);
+	//Find the cells that contain formula L"=SUM(A11,A12)"
+	intrusive_ptr<Spire::Xls::IList<CellRange>> ranges = sheet->FindAll(L"=SUM(A11,A12)", FindType::Formula, ExcelFindOptions::None);
 
-	//Create a string* builder = new string()
-	wstring* builder = new wstring();
+	//Create a string* builder = new std::wstring()
+	std::wstring* builder = new std::wstring();
 
 	//Append the address of found cells to builder
 	if (ranges->GetCount() != 0)
 	{
+		//for (auto range : ranges)
+		//{
 		for (int i = 0; i < ranges->GetCount(); i++)
 		{
-			CellRange* cr = ranges->GetItem(i);
+			intrusive_ptr<CellRange> cr = ranges->GetItem(i);
 			wstring address = cr->GetRangeAddress();
-			builder->append(L"The address of found cell is: " + address + L"\n");
+			builder->append(L"The address of found cell is: " + address);
 		}
 	}
 	else
@@ -40,7 +42,7 @@ int main() {
 
 	//Save to file.
 	ofs.open(outputFile, ios::out);
-	ofs << *builder << endl;
+	ofs << builder << endl;
 	ofs.close();
 	workbook->Dispose();
 

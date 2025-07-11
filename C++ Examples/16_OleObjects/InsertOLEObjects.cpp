@@ -8,23 +8,21 @@ int main() {
 	wstring outputFile = output_path + L"InsertOLEObjects.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	sheet->GetRange(L"A1")->SetText(L"Here is an OLE Object.");
 	//insert OLE object
-	Workbook* book = new Workbook();
+	intrusive_ptr<Workbook> book = new Workbook();
 	book->LoadFromFile(inputFile.c_str());
 	book->GetWorksheets()->Get(0)->GetPageSetup()->SetLeftMargin(0);
 	book->GetWorksheets()->Get(0)->GetPageSetup()->SetRightMargin(0);
 	book->GetWorksheets()->Get(0)->GetPageSetup()->SetTopMargin(0);
 	book->GetWorksheets()->Get(0)->GetPageSetup()->SetBottomMargin(0);
-	Image* image = book->GetWorksheets()->Get(0)->ToImage(1, 1, 19, 5);
-	Stream* stream = new Stream();
-	image->Save(stream, ImageFormat::GetPng());
-	Spire::Xls::IOleObject* oleObject = sheet->GetOleObjects()->Add(inputFile.c_str(), stream, OleLinkType::Embed);
+	intrusive_ptr<Stream> image = book->GetWorksheets()->Get(0)->ToImage(1, 1, 19, 5);
+	intrusive_ptr<Spire::Xls::IOleObject> oleObject = sheet->GetOleObjects()->Add(inputFile.c_str(), image, OleLinkType::Embed);
 
 	oleObject->SetLocation(sheet->GetRange(L"B4"));
 	oleObject->SetObjectType(OleObjectType::ExcelWorksheet);
@@ -32,6 +30,4 @@ int main() {
 	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
-
-	ifstream f(outputFile.c_str());
 }

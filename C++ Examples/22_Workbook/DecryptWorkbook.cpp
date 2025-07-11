@@ -12,7 +12,7 @@ int main() {
 	if (value)
 	{
 		//Load a file with the password specified
-		Workbook* workbook = new Workbook();
+		intrusive_ptr<Workbook> workbook = new Workbook();
 		workbook->SetOpenPassword(L"eiceblue");
 		workbook->LoadFromFile(inputFile.c_str());
 
@@ -21,6 +21,6 @@ int main() {
 
 		//Save the document
 		workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2010);
-		delete workbook;
+		workbook->Dispose();
 	}
 }

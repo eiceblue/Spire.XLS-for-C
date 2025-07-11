@@ -8,20 +8,19 @@ int main() {
 	wstring outputFile = output_path + L"AddTableWithFilter.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
-
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Create a List Object named in Table.
 	sheet->GetListObjects()->Create(L"Table", sheet->GetRange(1, 1, sheet->GetLastRow(), sheet->GetLastColumn()));
 
 	//Set the BuiltInTableStyle for List object.
-	IListObjects* ie = sheet->GetListObjects();
+	intrusive_ptr<IListObjects> ie = sheet->GetListObjects();
 	int i = ie->GetCount();
 	ie->GetItem(0)->SetBuiltInTableStyle(TableBuiltInStyles::TableStyleLight9);
 

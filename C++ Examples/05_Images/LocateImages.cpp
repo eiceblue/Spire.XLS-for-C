@@ -8,22 +8,19 @@ int main() {
 	wstring outputFile = outputFolder + L"LocateImages_out.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
-	//Get the first picture
-	XlsBitmapShape* pic = sheet->GetPictures()->Get(0);
-
-	//Set offset
+	intrusive_ptr<XlsBitmapShape> pic = sheet->GetPictures()->Get(0);
 	pic->SetLeftColumnOffset(300);
 	pic->SetTopRowOffset(300);
 
-	//Save to file
+	//Save to file.
 	workbook->SaveToFile(outputFile.c_str(), ExcelVersion::Version2013);
 	workbook->Dispose();
 }

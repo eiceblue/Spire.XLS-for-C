@@ -8,26 +8,26 @@ int main() {
 	wstring outputFile = output + L"SetFontAndBackground.xlsx";
 
 	//Create a workbook
-	Workbook* workbook = new Workbook();
+	intrusive_ptr<Workbook> workbook = new Workbook();
 
 	//Load the Excel document from disk
 	workbook->LoadFromFile(inputFile.c_str());
 
 	//Get the first worksheet
-	Worksheet* sheet = workbook->GetWorksheets()->Get(0);
+	intrusive_ptr<Worksheet> sheet = dynamic_pointer_cast<Worksheet>(workbook->GetWorksheets()->Get(0));
 
 	//Get the textbox which will be edited.
-	XlsTextBoxShape* shape = dynamic_cast<XlsTextBoxShape*>(sheet->GetTextBoxes()->Get(0));
+	intrusive_ptr<XlsTextBoxShape> shape = dynamic_pointer_cast<XlsTextBoxShape>(sheet->GetTextBoxes()->Get(0));
 
 	//Set the font and background color for the textbox.
 	//Set font.
-	ExcelFont* font = workbook->CreateExcelFont();
+	intrusive_ptr<ExcelFont> font = workbook->CreateExcelFont();
 	//font.IsStrikethrough = true;
 	font->SetFontName(L"Century Gothic");
 	font->SetSize(10);
 	font->SetIsBold(true);
-	font->SetColor(Spire::Common::Color::GetBlue());
-	RichTextShape* tempVar = dynamic_cast<RichTextShape*>(shape->GetRichText());
+	font->SetColor(Spire::Xls::Color::GetBlue());
+	intrusive_ptr<RichTextShape> tempVar = dynamic_pointer_cast<RichTextShape>(shape->GetRichText());
 	wstring text = shape->GetText();
 	tempVar->SetFont(0, text.size() - 1, font);
 
